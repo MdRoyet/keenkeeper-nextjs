@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useFriends } from "@/context/FriendsContext";
 import {
   PieChart,
@@ -14,12 +14,17 @@ import {
 export default function StatsPage() {
   const { timeline } = useFriends();
 
+  // Fix for Next.js Hydration Error with Recharts
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // 1. Process the Timeline Data
-  // We use useMemo so it only recalculates when the timeline actually changes
   const chartData = useMemo(() => {
     // If no interactions exist yet, show a dummy placeholder chart
     if (timeline.length === 0) {
-      return [{ name: "No Data", value: 1, color: "#e2e8f0" }]; // Light gray
+      return [{ name: "No Data", value: 1, color: "#e2e8f0" }];
     }
 
     // Count how many times each interaction type happened
@@ -33,6 +38,7 @@ export default function StatsPage() {
       { name: "Text", value: counts["Text"] || 0, color: "#8b5cf6" }, // Purple
       { name: "Call", value: counts["Call"] || 0, color: "#274c3b" }, // Dark Green
       { name: "Video", value: counts["Video"] || 0, color: "#22c55e" }, // Light Green
+      { name: "Meetup", value: counts["Meetup"] || 0, color: "#eab308" }, // Yellow
     ].filter((item) => item.value > 0); // Only show slices that have actual data
   }, [timeline]);
 
@@ -67,47 +73,53 @@ export default function StatsPage() {
         <h2 className="mb-8 font-medium text-[#274c3b]">By Interaction Type</h2>
 
         {/* The Chart Container */}
-        {/* We use ResponsiveContainer so it scales perfectly on mobile and desktop */}
         <div className="w-full h-[400px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%" // Center X
-                cy="50%" // Center Y
-                innerRadius={100} // Creates the donut hole
-                outerRadius={140} // Thickness of the donut
-                paddingAngle={5} // The gap between slices (matches your Figma)
-                dataKey="value"
-                animationBegin={0}
-                animationDuration={1500} // Smooth 1.5s load animation
-              >
-                {/* Map our specific colors to each slice */}
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.color}
-                    stroke="transparent" // Removes default borders
-                    className="transition-all duration-300 outline-none hover:opacity-80"
-                  />
-                ))}
-              </Pie>
+          {/* Prevent Hydration Error: Only render Recharts when mounted in the browser */}
+          {!isMounted ? (
+            <div className="flex items-center justify-center w-full h-full">
+              <span className="loading loading-spinner loading-lg text-[#0ca789]"></span>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%" // Center X
+                  cy="50%" // Center Y
+                  innerRadius={100} // Creates the donut hole
+                  outerRadius={140} // Thickness of the donut
+                  paddingAngle={5} // The gap between slices
+                  dataKey="value"
+                  animationBegin={0}
+                  animationDuration={1500} // Smooth 1.5s load animation
+                >
+                  {/* Map our specific colors to each slice */}
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      stroke="transparent" // Removes default borders
+                      className="transition-all duration-300 outline-none hover:opacity-80"
+                    />
+                  ))}
+                </Pie>
 
-              <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} />
 
-              {/* Legend Configuration */}
-              <Legend
-                verticalAlign="bottom"
-                height={36}
-                iconType="circle"
-                formatter={(value, entry) => (
-                  <span className="text-sm font-medium text-gray-500 ml-1">
-                    {value}
-                  </span>
-                )}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+                {/* Legend Configuration */}
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                  iconType="circle"
+                  formatter={(value) => (
+                    <span className="text-sm font-medium text-gray-500 ml-1">
+                      {value}
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         {/* Empty State Warning */}
