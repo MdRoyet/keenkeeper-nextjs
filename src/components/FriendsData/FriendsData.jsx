@@ -49,7 +49,9 @@ const FriendsData = () => {
 
   return (
     <div className="w-full max-w-5xl px-4 py-8 mx-auto">
-      <h2 className="mb-6 text-2xl font-bold text-[#0f293e]">Your Friends</h2>
+      <h2 className="mb-6 text-2xl font-bold text-center text-[#0f293e] sm:text-left">
+        Your Friends
+      </h2>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {friends.map((friend) => (
