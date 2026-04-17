@@ -1,20 +1,19 @@
-"use client"; // Required because Context uses React hooks
+"use client";
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 
-// 1. Create the Context
 const FriendsContext = createContext();
 
-// 2. Create the Provider Component
 export const FriendsProvider = ({ children }) => {
   const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch data from the public folder when the app loads
+  // NEW: Add a state to hold our timeline events
+  const [timeline, setTimeline] = useState([]);
+
   useEffect(() => {
     const loadFriends = async () => {
       try {
-        // Because it's in public/data, we just use the absolute path
         const response = await fetch("/data/friends.json");
         const data = await response.json();
         setFriends(data);
@@ -24,19 +23,32 @@ export const FriendsProvider = ({ children }) => {
         setIsLoading(false);
       }
     };
-
     loadFriends();
   }, []);
 
-  // We pass 'friends' and 'setFriends' down so other components can read OR update the data
+  // NEW: Function to add a new check-in to the timeline
+  const addTimelineEntry = (friendName, type) => {
+    const newEntry = {
+      id: Date.now(),
+      date: new Date().toLocaleDateString(), // e.g., "4/17/2026"
+      title: `${type} with ${friendName}`,
+      type: type,
+    };
+
+    // Add to the beginning of the timeline array
+    setTimeline((prev) => [newEntry, ...prev]);
+  };
+
   return (
-    <FriendsContext.Provider value={{ friends, setFriends, isLoading }}>
+    // Make sure to pass timeline and addTimelineEntry down!
+    <FriendsContext.Provider
+      value={{ friends, setFriends, isLoading, timeline, addTimelineEntry }}
+    >
       {children}
     </FriendsContext.Provider>
   );
 };
 
-// 3. Create a custom hook to make using the context super easy
 export const useFriends = () => {
   return useContext(FriendsContext);
 };

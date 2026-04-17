@@ -1,7 +1,8 @@
-"use client"; // Required because we are using the Context hook
+"use client";
 
 import React from "react";
-import { useFriends } from "@/context/FriendsContext"; // Import our custom hook
+import Link from "next/link"; // Added Link for routing
+import { useFriends } from "@/context/FriendsContext";
 
 const FriendsData = () => {
   // Pull the friends data and loading state from Context
@@ -33,11 +34,15 @@ const FriendsData = () => {
     }
   };
 
-  // Show a loading state while fetching from the public folder
+  // DaisyUI Loading Spinner State
   if (isLoading) {
     return (
-      <div className="w-full max-w-5xl px-4 py-8 mx-auto text-center">
-        <p className="text-gray-500">Loading your friends...</p>
+      <div className="flex flex-col items-center justify-center w-full max-w-5xl py-24 mx-auto">
+        {/* DaisyUI Spinner using your teal theme color */}
+        <span className="loading loading-spinner loading-lg text-[#0ca789]"></span>
+        <p className="mt-4 font-medium text-gray-500">
+          Loading your friends...
+        </p>
       </div>
     );
   }
@@ -48,35 +53,47 @@ const FriendsData = () => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {friends.map((friend) => (
-          <div
+          // ⚡ Wrapped the card in a Link to make it clickable
+          <Link
+            href={`/friend/${friend.id}`}
             key={friend.id}
-            className="flex flex-col items-center p-6 bg-white border border-gray-100 shadow-sm rounded-xl"
+            className="block transition-transform hover:-translate-y-1"
           >
-            <img
-              src={friend.picture}
-              alt={friend.name}
-              className="object-cover w-20 h-20 mb-4 rounded-full"
-            />
-            <h3 className="text-lg font-bold text-[#0f293e]">{friend.name}</h3>
-            <p className="mb-3 text-sm text-gray-400">
-              {friend.days_since_contact}d ago
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-4">
-              {friend.tags.map((tag, index) => (
+            <div className="flex flex-col items-center h-full p-6 transition-shadow bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-md">
+              <img
+                src={friend.picture}
+                alt={friend.name}
+                className="object-cover w-20 h-20 mb-4 rounded-full"
+              />
+              <h3 className="text-lg font-bold text-[#0f293e] text-center">
+                {friend.name}
+              </h3>
+              <p className="mb-3 text-sm text-gray-400">
+                {friend.days_since_contact}d ago
+              </p>
+
+              {/* Tags */}
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                {friend.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 text-[10px] font-bold text-green-800 uppercase bg-[#d1fae5] rounded-full tracking-wide text-center"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Status Badge (Pushed to bottom using mt-auto if tags take multiple lines) */}
+              <div className="mt-auto">
                 <span
-                  key={index}
-                  className="px-3 py-1 text-[10px] font-bold text-green-800 uppercase bg-[#d1fae5] rounded-full tracking-wide"
+                  className={`inline-block px-4 py-1 text-xs font-semibold rounded-full ${getStatusStyle(friend.status)}`}
                 >
-                  {tag}
+                  {formatStatusText(friend.status)}
                 </span>
-              ))}
+              </div>
             </div>
-            <span
-              className={`px-4 py-1 text-xs font-semibold rounded-full ${getStatusStyle(friend.status)}`}
-            >
-              {formatStatusText(friend.status)}
-            </span>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
