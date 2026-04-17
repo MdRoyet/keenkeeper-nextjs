@@ -1,17 +1,47 @@
+"use client"; // Required because we are pulling data from the Context
+
 import React from "react";
 import { Plus } from "lucide-react";
+import { useFriends } from "@/context/FriendsContext"; // Import your Context
 
 const Banner = () => {
-  // Array to hold our stat card data so the JSX stays clean
+  // 1. Get the friends data from our global state
+  const { friends, isLoading } = useFriends();
+
+  // 2. Calculate the stats dynamically
+  // Total friends is simply the length of the array
+  const totalFriends = friends.length;
+
+  // On Track: filter friends who have the 'on-track' status
+  const onTrackCount = friends.filter((f) => f.status === "on-track").length;
+
+  // Need Attention: filter friends who are 'overdue' or 'almost due'
+  const needAttentionCount = friends.filter(
+    (f) => f.status === "overdue" || f.status === "almost due",
+  ).length;
+
+  // Interactions This Month: Anyone contacted in the last 30 days
+  const recentInteractions = friends.filter(
+    (f) => f.days_since_contact <= 30,
+  ).length;
+
+  // 3. Update our array to use the dynamic variables instead of hardcoded strings
   const stats = [
-    { id: 1, value: "10", label: "Total Friends" },
-    { id: 2, value: "3", label: "On Track" },
-    { id: 3, value: "6", label: "Need Attention" },
-    { id: 4, value: "12", label: "Interactions This Month" },
+    { id: 1, value: isLoading ? "-" : totalFriends, label: "Total Friends" },
+    { id: 2, value: isLoading ? "-" : onTrackCount, label: "On Track" },
+    {
+      id: 3,
+      value: isLoading ? "-" : needAttentionCount,
+      label: "Need Attention",
+    },
+    {
+      id: 4,
+      value: isLoading ? "-" : recentInteractions,
+      label: "Interactions This Month",
+    },
   ];
 
   return (
-    // Added some top and bottom padding to give the banner room to breathe
     <div className="flex flex-col items-center w-full px-4 pt-16 pb-8">
       {/* Header Section */}
       <h1 className="text-4xl md:text-5xl font-bold text-[#0f293e] text-center mb-4 tracking-tight">
@@ -48,7 +78,7 @@ const Banner = () => {
         ))}
       </div>
 
-      {/* Subtle bottom divider (as seen in your screenshot) */}
+      {/* Subtle bottom divider */}
       <hr className="w-full max-w-5xl mt-12 border-gray-200" />
     </div>
   );
