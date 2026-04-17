@@ -1,63 +1,93 @@
-"use client"; // This is required when using usePathname!
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation"; // Import the hook
-import { Home, Clock, LineChart } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, Home, Clock, BarChart3 } from "lucide-react";
 
 const NavBar = () => {
-  // Get the current URL path (e.g., "/", "/timeline", "/stats")
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Store our navigation links in an array to keep the code clean
+  // Helper to check if a link is active
+  const isActive = (path) => pathname === path;
+
   const navLinks = [
-    { name: "Home", href: "/", icon: Home },
-    { name: "Timeline", href: "/timeline", icon: Clock },
-    { name: "Stats", href: "/stats", icon: LineChart },
+    { name: "Home", path: "/", icon: <Home size={18} /> },
+    { name: "Timeline", path: "/timeline", icon: <Clock size={18} /> },
+    { name: "Stats", path: "/stats", icon: <BarChart3 size={18} /> },
   ];
 
   return (
-    <nav className="flex items-center justify-between w-full px-8 py-4 bg-white border-b border-gray-100 border-t-2 border-t-[#0ca789]">
-      {/* Left Side: Logo */}
-      <Link href="/" className="flex items-center block">
-        <Image
-          src="/assets/logo.png"
-          alt="KeenKeeper Logo"
-          width={160}
-          height={40}
-          className="object-contain"
-          priority
-        />
-      </Link>
+    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm">
+      <div className="max-w-6xl px-4 mx-auto">
+        <div className="flex items-center justify-between h-16">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-xl font-bold tracking-tight text-[#0f293e]">
+              Keen<span className="text-[#0ca789]">Keeper</span>
+            </span>
+          </Link>
 
-      {/* Right Side: Dynamic Navigation Links */}
-      <div className="flex items-center gap-2">
-        {navLinks.map((link) => {
-          // Check if the current URL matches the link's destination
-          const isActive = pathname === link.href;
-          const Icon = link.icon;
+          {/* DESKTOP MENU (Hidden on Mobile) */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  isActive(link.path)
+                    ? "bg-[#274c3b] text-white shadow-md"
+                    : "text-gray-500 hover:bg-slate-50 hover:text-[#0ca789]"
+                }`}
+              >
+                {link.icon}
+                {link.name}
+              </Link>
+            ))}
+          </div>
 
-          return (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`flex items-center gap-2 px-4 py-2 text-sm transition-colors rounded ${
-                isActive
-                  ? "font-semibold text-white bg-[#274c3b]" // Active styling (Dark Green)
-                  : "font-medium text-[#64748b] hover:text-[#0f293e] hover:bg-slate-50" // Inactive styling
-              }`}
+          {/* MOBILE HAMBURGER BUTTON (Visible only on Mobile) */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-gray-600 transition-colors rounded-md hover:bg-slate-100 focus:outline-none"
             >
-              <Icon
-                size={18}
-                // Make the icon slightly thicker if it's active
-                strokeWidth={isActive ? 2.5 : 2}
-              />
-              {link.name}
-            </Link>
-          );
-        })}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* MOBILE DROPDOWN MENU */}
+      {/* This div only shows when isOpen is true and on small screens */}
+      {isOpen && (
+        <div className="absolute left-4 right-4 top-16 md:hidden">
+          <div className="p-2 mt-2 bg-white border border-gray-100 shadow-xl rounded-2xl animate-in fade-in zoom-in duration-200">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                onClick={() => setIsOpen(false)} // Close menu when link is clicked
+                className={`flex items-center gap-3 px-4 py-3 text-base font-medium rounded-xl transition-colors ${
+                  isActive(link.path)
+                    ? "bg-[#f0fdf4] text-[#0ca789]"
+                    : "text-gray-600 hover:bg-slate-50"
+                }`}
+              >
+                <span
+                  className={
+                    isActive(link.path) ? "text-[#0ca789]" : "text-gray-400"
+                  }
+                >
+                  {link.icon}
+                </span>
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
