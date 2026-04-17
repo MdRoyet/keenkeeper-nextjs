@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🤝 KeenKeeper
 
-## Getting Started
+> **Your personal shelf of meaningful connections. Browse, tend, and nurture the relationships that matter most.**
 
-First, run the development server:
+KeenKeeper is a modern, beautifully designed web application that helps you stay in touch with your friends, family, and professional network. It tracks your last interactions, sets contact goals, and provides insights into your communication habits so you never lose touch with the people who matter.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. **📊 Smart Dashboard & Status Tracking** Instantly see who you are "On-Track" with and whose relationship is "Overdue" for a check-in. The dashboard calculates dynamic statuses based on your custom relationship goals and the last time you connected.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **⚡ Quick Check-Ins & Interaction Timeline** Log a Call, Text, Video chat, or Meetup with a single click. Every interaction is saved to a global Timeline that you can easily filter, sort, and search to review your relationship history.
 
-## Learn More
+3. **📈 Friendship Analytics** Visualize your social habits! A dedicated analytics page uses smooth, animated donut charts to break down your interaction types, helping you understand how you prefer to stay in touch.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project was built with modern web development tools and best practices:
 
-## Deploy on Vercel
+- **Framework:** [Next.js (App Router)](https://nextjs.org/)
+- **Library:** [React](https://reactjs.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) & [DaisyUI](https://daisyui.com/)
+- **State Management:** React Context API
+- **Charts/Analytics:** [Recharts](https://recharts.org/)
+- **Icons:** [Lucide React](https://lucide.dev/) & [React Icons](https://react-icons.github.io/react-icons/)
+- **Typography:** [Geist Font](https://vercel.com/font) by Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
