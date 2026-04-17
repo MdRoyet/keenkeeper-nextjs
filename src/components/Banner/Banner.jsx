@@ -44,17 +44,17 @@ const Banner = () => {
   return (
     <div className="flex flex-col items-center w-full px-4 pt-16 pb-8">
       {/* Header Section */}
-      <h1 className="text-4xl md:text-5xl font-bold text-[#0f293e] text-center mb-4 tracking-tight">
+      <h1 className="text-4xl md:text-6xl font-bold text-[#0f293e] text-center mb-4 tracking-tight">
         Friends to keep close in your life
       </h1>
 
-      <p className="max-w-2xl mx-auto mb-8 text-center text-[#64748b] leading-relaxed">
+      <p className="max-w-3xl mx-auto mb-8 text-center text-[#64748b] leading-relaxed">
         Your personal shelf of meaningful connections. Browse, tend, and nurture
-        the relationships that matter most.
+        the <br /> relationships that matter most.
       </p>
 
       {/* Call to Action Button */}
-      <button className="flex items-center gap-2 px-5 py-2.5 mb-16 text-sm font-semibold text-white transition-colors rounded-md bg-[#274c3b] hover:bg-[#1e3b2e] shadow-sm">
+      <button className="flex items-center gap-2 px-5 py-2.5 mb-16 text-1xl font-bold text-white transition-colors rounded-md bg-[#274c3b] hover:bg-[#1e3b2e] shadow-sm">
         <Plus size={18} strokeWidth={2.5} />
         Add a Friend
       </button>
