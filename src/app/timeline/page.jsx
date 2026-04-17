@@ -65,7 +65,8 @@ export default function TimelinePage() {
         {/* Left Side Controls (Filter & Sort) */}
         <div className="flex gap-4">
           <select
-            className="w-full max-w-xs text-sm bg-white border-gray-200 select select-bordered focus:border-[#0ca789] focus:ring-[#0ca789]"
+            // ADDED: text-gray-700 to force the text to be visible
+            className="w-full max-w-xs text-sm text-gray-700 bg-white border-gray-200 select select-bordered focus:border-[#0ca789] focus:ring-[#0ca789]"
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
@@ -77,7 +78,8 @@ export default function TimelinePage() {
           </select>
 
           <select
-            className="w-full max-w-xs text-sm bg-white border-gray-200 select select-bordered focus:border-[#0ca789] focus:ring-[#0ca789]"
+            // ADDED: text-gray-700
+            className="w-full max-w-xs text-sm text-gray-700 bg-white border-gray-200 select select-bordered focus:border-[#0ca789] focus:ring-[#0ca789]"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
@@ -91,7 +93,8 @@ export default function TimelinePage() {
           <input
             type="text"
             placeholder="Search timeline..."
-            className="w-full pl-10 pr-4 text-sm bg-white border-gray-200 input input-bordered focus:border-[#0ca789] focus:ring-[#0ca789]"
+            // ADDED: text-gray-700
+            className="w-full pl-10 pr-4 text-sm text-gray-700 bg-white border-gray-200 input input-bordered focus:border-[#0ca789] focus:ring-[#0ca789] placeholder-gray-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
